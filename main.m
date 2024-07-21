@@ -1,4 +1,5 @@
 %% generate observation
+clear
 % design matrix
 n = 100; p = 200;
 nof_ite = 300;
@@ -17,9 +18,10 @@ end
 
 %noise
 logarithm_noise_var = -5:0.2:1;
-
+idx=1;
 for logarithm_noise_var = -5:0.2:1
-    noise_sigma = sqrt(10 ^ logarithm_noise_var);
+    for i=1:nof_trial
+    noise_sigma = sqrt(10^(logarithm_noise_var));
     epsilon_prior = normrnd(0, noise_sigma, n, 1); %epsilon:n by 1
     epsilon_mixture = normrnd(0, noise_sigma, n, 1);
     %x
@@ -27,12 +29,14 @@ for logarithm_noise_var = -5:0.2:1
     x_gaussian_mixture = gaussian_mixture(sigma, mu, p);
     %z
     z_gaussian_prior = A * x_gaussian_prior + epsilon_prior;
-    z_gaussian_mixture = A * gaussian_mixture + epsilon_mixture;
+    z_gaussian_mixture = A * x_gaussian_mixture + epsilon_mixture;
     %estimate
     MMSE_prior = prior_estimator(z_gaussian_prior, 0, A, noise_sigma, sigma); %mean(mu)=0
-
+    res(i)=norm(x_gaussian_prior-MMSE_prior);
+    end
+    res_var(idx)=mean(res);
+    idx=idx+1;
 end
-
 %% res
 
 %% plot
