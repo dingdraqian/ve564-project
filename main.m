@@ -32,9 +32,13 @@ for logarithm_noise_var = -5:0.2:1
     z_gaussian_mixture = A * x_gaussian_mixture + epsilon_mixture;
     %estimate
     MMSE_prior = prior_estimator(z_gaussian_prior, 0, A, noise_sigma, sigma); %mean(mu)=0
-    res(i)=norm(x_gaussian_prior-MMSE_prior);
+    MMSE_mixture = mixture_mmse_estimator(z_gaussian_mixture, mu, A, noise_sigma, sigma);
+    LMMSE_mixture = mixture_lmmse_estimator(z_gaussian_mixture, mu, A, noise_sigma, sigma);
+    cost_prior_mmse(i)=norm(x_gaussian_prior-MMSE_prior);
+    cost_mixture_mmse(i)=norm(x_gaussian_mixture-MMSE_mixture);
+    cost_mixture_lmmse(i)=norm(x_gaussian_mixture-LMMSE_mixture);
     end
-    res_var(idx)=mean(res);
+    res_var(idx)=mean(cost_prior_mmse);
     idx=idx+1;
 end
 %% res
