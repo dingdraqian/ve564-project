@@ -38,9 +38,15 @@ for logarithm_noise_var = -5:0.2:1
     cost_mixture_mmse(i)=norm(x_gaussian_mixture-MMSE_mixture);
     cost_mixture_lmmse(i)=norm(x_gaussian_mixture-LMMSE_mixture);
     end
-    res_var(idx)=mean(cost_prior_mmse);
+    res_prior_mmse(idx)=mean(cost_prior_mmse);
+    res_mixture_mmse(idx)=mean(cost_mixture_mmse);
+    res_mixture_lmmse(idx)=mean(cost_mixture_lmmse);
     idx=idx+1;
 end
 %% res
 
 %% plot
+figure 
+plot(res_mixture_mmse);
+hold on;
+plot(res_mixture_lmmse);

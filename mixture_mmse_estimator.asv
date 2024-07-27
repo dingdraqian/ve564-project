@@ -5,11 +5,10 @@ function res=mixture_mmse_estimator(z, mu, A, noise_sigma, sigma)
     k=size(mu,2);
     sigma_i=sigma*ones(k,1);
     for i=1:k
-        mu_hat=mu(i)*A*e;
-        C=sigma_i(i)^2*A*A'+noise_sigma^2*eye(n);
-        phi(i)=1/(((2*pi)^(n/2))*sqrt(det(C)))*exp(-1/2*(z-mu_hat)'*inv(C)*(z-mu_hat));
+        mu_hat(:,i)=mu(i)*A*e;
+        C(:,:,i)=sigma_i(i)^2*A*A'+noise_sigma^2*eye(n);
+         phi(i)=1/((2*pi)^(n/2)*det(C(:,:,i)))^0.5*exp(-1/2*(z-mu_hat(i))'*inv(C(:,:,i))*(z-mu_hat(i)));
     end
-   
     res=0;
     for i=1:k
         beta(i)=phi(i)/sum(phi);
